@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leo en tu salón · CUNorte sin manuales</title>
+<meta name="description" content="Misión 1 de CUNorte sin manuales: conoce a Leo, el león de Control Escolar, en realidad aumentada.">
+<meta name="theme-color" content="#8fc8f4">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<script type="module" src="model-viewer.min.js"></script>
+<style>
+  :root {
+    --cielo: #8fc8f4;
+    --cielo-claro: #d7ecfc;
+    --tinta: #1d1a17;
+    --rojo: #c8202f;
+    --oro: #f2b632;
+    --blanco: #fffdf8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: "Nunito", system-ui, sans-serif;
+    color: var(--tinta);
+    background: linear-gradient(180deg, var(--cielo) 0%, var(--cielo-claro) 70%, var(--blanco) 100%);
+    display: flex; flex-direction: column; min-height: 100dvh;
+  }
+  header {
+    padding: 18px 16px 4px; text-align: center;
+  }
+  .sello {
+    display: inline-block; font-family: "Baloo 2", sans-serif; font-weight: 800;
+    font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+    background: var(--tinta); color: var(--oro); padding: 4px 12px; border-radius: 999px;
+  }
+  h1 {
+    font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: clamp(28px, 8vw, 40px);
+    line-height: 1; margin: 10px 0 0;
+  }
+  h1 span { color: var(--rojo); }
+  model-viewer {
+    flex: 1; width: 100%; min-height: 52dvh;
+    --poster-color: transparent;
+    background: transparent;
+  }
+  .globo {
+    position: relative; margin: 0 16px; padding: 14px 16px;
+    background: var(--blanco); border: 3px solid var(--tinta); border-radius: 18px;
+    font-size: 16px; line-height: 1.35; box-shadow: 4px 4px 0 var(--tinta);
+  }
+  .globo::before {
+    content: ""; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    border: 12px solid transparent; border-bottom-color: var(--tinta); border-top: 0;
+  }
+  .globo b { color: var(--rojo); }
+  .acciones { padding: 16px; display: grid; gap: 10px; }
+  .boton-ar {
+    font-family: "Baloo 2", sans-serif; font-weight: 800; font-size: 20px;
+    width: 100%; padding: 14px 18px; border: 3px solid var(--tinta); border-radius: 14px;
+    background: var(--oro); color: var(--tinta); box-shadow: 4px 4px 0 var(--tinta);
+    cursor: pointer;
+  }
+  .boton-ar:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--tinta); }
+  .nota { font-size: 14px; text-align: center; margin: 0; color: #3a3631; }
+  .sin-ar { display: none; }
+  .sin-ar.visible { display: block; }
+  /* boton AR dentro del visor */
+  model-viewer .boton-ar { position: absolute; left: 16px; right: 16px; bottom: 14px; width: auto; }
+  model-viewer:not([ar-status="not-presenting"]) .boton-ar { display: none; }
+  .barra {
+    position: absolute; left: 20%; right: 20%; top: 50%; height: 8px; border-radius: 999px;
+    background: rgba(29,26,23,.15); overflow: hidden;
+  }
+  .barra div { height: 100%; width: 0; background: var(--rojo); transition: width .2s; }
+  .barra.oculta { opacity: 0; transition: opacity .3s; }
+  footer { text-align: center; font-size: 12px; padding: 0 16px 18px; color: #4b4640; }
+</style>
+</head>
+<body>
+  <header>
+    <span class="sello">CUNorte sin manuales · Misión 1</span>
+    <h1>Leo, el <span>león</span></h1>
+  </header>
+
+  <model-viewer id="leo"
+    src="leo.glb"
+    poster="leo-poster.webp"
+    alt="Leo, el león de Control Escolar, en 3D"
+    ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" ar-placement="floor"
+    camera-controls touch-action="pan-y" auto-rotate auto-rotate-delay="1500" rotation-per-second="20deg"
+    camera-orbit="0deg 80deg auto" shadow-intensity="1" shadow-softness="0.8" exposure="1.05"
+    environment-image="neutral" interaction-prompt="auto">
+    <button slot="ar-button" class="boton-ar">Ponlo en tu salón</button>
+    <div class="barra" slot="progress-bar"><div></div></div>
+  </model-viewer>
+
+  <div class="globo">
+    ¡Hola! Soy Leo y vivo en Control Escolar. ¿Te dijeron que todo se hace en el SIIAU? Ya no: desde 2024 tus materias, tu horario y tu historial están en <b>LEO</b>. Las tareas de tus clases van en <b>Moodle</b>; de eso te habla Momo.
+  </div>
+
+  <div class="acciones">
+    <p class="nota" id="ayuda">Toca el botón, apunta la cámara al piso y mueve el celular despacio.</p>
+    <p class="nota sin-ar" id="sinAr">Tu celular no puede mostrar realidad aumentada, pero puedes girar a Leo con el dedo.</p>
+  </div>
+
+  <footer>Proyecto transmedia · Maestría en Tecnologías para el Aprendizaje · CUNorte</footer>
+
+<script>
+  const mv = document.getElementById('leo');
+  const barra = mv.querySelector('.barra');
+  mv.addEventListener('progress', (e) => {
+    const p = e.detail.totalProgress;
+    barra.firstElementChild.style.width = (p * 100) + '%';
+    if (p === 1) barra.classList.add('oculta');
+  });
+  mv.addEventListener('load', () => {
+    if (!mv.canActivateAR) {
+      document.getElementById('ayuda').style.display = 'none';
+      document.getElementById('sinAr').classList.add('visible');
+    }
+  });
+</script>
+</body>
+</html>
